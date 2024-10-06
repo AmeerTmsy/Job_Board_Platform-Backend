@@ -67,7 +67,7 @@ const updateJob = async (req, res) => {
     } catch (error) {
         res.status(400).json({
             success: false,
-            message: "Unable to update the user"
+            message: "Unable to update the job's information"
         })
     }
 }
@@ -78,7 +78,7 @@ const deleteJob = async (req, res) => {
         if (deleteJob) {
             res.status(200).json({
                 success: true,
-                message: 'Book removed successfully',
+                message: 'Job removed successfully',
                 data: deletedJob
             });
         } else {

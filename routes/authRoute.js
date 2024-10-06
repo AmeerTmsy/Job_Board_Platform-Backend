@@ -3,7 +3,7 @@ const { userVerify, userLogin, userlogout } = require('../controllers/authContro
 const { checkLogin } = require('../midlleware/checkLogin');
 const router = express.Router();
 
-router.post('/', userLogin);
+router.post('/login', userLogin);
 router.post('/verify', checkLogin, userVerify);
 router.post('/logout', userlogout);
 

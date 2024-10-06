@@ -20,8 +20,9 @@ const jobSchema = new mongoose.Schema({
         required: true,
     },
     salary: {
-        type: String,
+        type: Number,
         required: true,
+        min: 0,
     },
     location: {
         type: String,
@@ -29,8 +30,8 @@ const jobSchema = new mongoose.Schema({
     },
     jobType: {
         type: String,
-        enum: ['partime', 'fulltime'],
-        default: 'fulltime',
+        enum: ['Part-Time', 'Full-Time'], // Capitalized and hyphenated for clarity
+        default: 'Full-Time',
     },
     hiring: {
         type: Boolean,

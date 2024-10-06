@@ -20,7 +20,7 @@ const pdfStorage = new CloudinaryStorage({
 });
 
 // Storage for profile images
-const imageStorage = new CloudinaryStorage({
+const profileImage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'profile_images',
@@ -28,13 +28,23 @@ const imageStorage = new CloudinaryStorage({
         transformation: [{ width: 500, height: 500, crop: 'limit' }], // Optionally resize the image
     },
 });
+const companyIconImage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'company_icon_images',
+        allowed_formats: ['jpg', 'png'], // Only allow images (jpg, png)
+        transformation: [{ width: 500, height: 500, crop: 'limit' }], // Optionally resize the image
+    },
+});
 
 // Multer upload setups
 const uploadResume = multer({ storage: pdfStorage });
-const uploadImage = multer({ storage: imageStorage });
+const uploadProfileImage = multer({ storage: profileImage });
+const uploadIconImage = multer({ storage: companyIconImage });
 
 // Export these functions to use in controllers
 module.exports = {
     uploadResume,
-    uploadImage,
+    uploadProfileImage,
+    uploadIconImage
 };
