@@ -25,7 +25,6 @@ const userSchema = new mongoose.Schema({
     bio: String,
     userType:{
         type: String,
-        enum: ['employee', 'employer', 'admin'],
         default: 'employee',
     }
 }, { timestamps: true })
