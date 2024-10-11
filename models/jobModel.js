@@ -15,9 +15,9 @@ const jobSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    company: {
-        type: String,
-        required: true,
+    company:{
+        type: mongoose.Types.ObjectId,
+        ref: "Company"
     },
     salary: {
         type: Number,
@@ -30,8 +30,8 @@ const jobSchema = new mongoose.Schema({
     },
     jobType: {
         type: String,
-        enum: ['Part-Time', 'Full-Time'], // Capitalized and hyphenated for clarity
-        default: 'Full-Time',
+        enum: ['part-time', 'full-time'],
+        default: 'full-time',
     },
     hiring: {
         type: Boolean,
@@ -39,11 +39,13 @@ const jobSchema = new mongoose.Schema({
     },
     jobCreatedBy:{
         type: mongoose.Types.ObjectId,
-        ref: "Job Creater"
+        ref: "Employer",
+        required: true,
     },
     verifiedJob:{
-        type: Boolean,
-        default: false,
+        type: String,
+        enum: ['pending', 'fulfilled', 'rejected'],
+        default: 'pending',
     }
 }, { timestamps: true })
 

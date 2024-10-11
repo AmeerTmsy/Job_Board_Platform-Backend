@@ -11,6 +11,7 @@ const companySchema = new mongoose.Schema({
     },
     industry: {
         type: String,
+        required: true,
     },
     website: {
         type: String,
@@ -20,15 +21,17 @@ const companySchema = new mongoose.Schema({
     },
     createdBy: {
         type: mongoose.Types.ObjectId,
-        ref: 'User',
+        ref: 'Employer',
         required: true
     },
-    verified: {
-        type: Boolean,
-        default: false,
+    verifiedCompany: {
+        type: String,
+        enum: ['pending', 'fulfilled', 'rejected'],  // Add the enum for status options
+        default: 'pending',  // Set the default value
     },
     logo: {
         type: String,
+        default: "https://frontendehubbucket.s3.ap-south-1.amazonaws.com/frontend/profile/dashboard/default_company_logo.png",
     }
 }, { timestamps: true });
 

@@ -11,7 +11,8 @@ const userRoute = require('./routes/userRoute');
 const employerRoute = require('./routes/employerRoute');
 const jobRout = require('./routes/jobRoute');
 const applicationRoute = require('./routes/applicationRoute');
-const authRoute = require('./routes/authRoute');
+const userAuthRoute = require('./routes/userAuthRoute');
+const employerAuthRoute = require('./routes/employerAuthRoute');
 const companyRoute = require('./routes/companyRoute');
 const saveJobRoute = require('./routes/saveJobRoute');
 
@@ -23,10 +24,11 @@ app.use('/users', userRoute);
 app.use('/employers', employerRoute);
 app.use('/jobs', jobRout);
 app.use('/applications', applicationRoute);
-app.use('/auth', authRoute);
+app.use('/user/auth', userAuthRoute);
+app.use('/employer/auth', employerAuthRoute);
 app.use('/companies', companyRoute);
 app.use('/saveJob', saveJobRoute);
 
-app.listen(port, () => { 
+app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 })  

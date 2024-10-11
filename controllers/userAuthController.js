@@ -6,11 +6,13 @@ const userLogin = async (req, res) => {
     try {
         const { email, password } = req.body
         const user = await User.findOne({ email: email });
-        // console.log(user)
+        console.log(user);
+        
+        
         if (!user) {
             return res.status(400).json({
                 success: false,
-                message: "login failed, user does not exist"
+                message: "login failed, looks like it is not your email"
             })
         }
 
@@ -18,13 +20,12 @@ const userLogin = async (req, res) => {
         if (!passMatch) {
             return res.status(400).json({
                 success: false,
-                message: "login failed, user password is incourrect"
+                message: "login failed, password is incourrect"
             })
         }
 
         const token = await tokenCreat(user)
         res.cookie('token', token, cookieSafetyMeasures)
-
         return res.status(200).json({
             success: true,
             message: "Login successful",
@@ -40,11 +41,17 @@ const userLogin = async (req, res) => {
         })
     }
 }
+
 const userVerify = async (req, res) => {
+    let data;
+    if(req.user) data = req.user
+    if(req.employer) data = req.employer
+    if(req.admin) data = req.admin
+    
     res.status(200).json({
-        success: false,
+        success: true,
         message: "autherised access",
-        data: req.user
+        data
     })
 }
 

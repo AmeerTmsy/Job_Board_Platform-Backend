@@ -38,8 +38,18 @@ const getApplicationById = async (req, res) => {
 }
 const addApplication = async (req, res) => {
     try {
-        const { jobId, userId } = req.body;
-        const resumeUrl = req.file.path; // This is the Cloudinary URL
+        const userId = req.user.id
+        const { jobId } = req.body;
+        let resumeUrl;
+        if(req.file){
+            resumeUrl = req.file.path;
+        } else {
+            return res.status(400).json({
+                success: false,
+                message: 'Resume not found',
+            });
+        }
+         // This is the Cloudinary URL
 
         // Create a new application object
         const newApplication = new Application({
@@ -58,18 +68,20 @@ const addApplication = async (req, res) => {
     } catch (error) {
         res.status(400).json({
             success: false,
-            message: 'Failed to upload application',
+            message: 'Failed to add application',
             error: error.message,
         });
     }
 }
 const updateApplication = async (req, res) => {
+    console.log(req.user);
     try {
-        const { jobId, userId } = req.body;
-        const updateData = { jobId, userId };
+        let updateData = {};
 
-        // Check if a new resume is being uploaded
-        if (req.file) updateData.resume = req.file.path;  // If a new file is uploaded, update resume URL
+        if (req.file) {
+            console.log('Uploaded File:', req.file); 
+            updateData.resume = req.file.path; 
+        }
 
         const updatedApplication = await Application.findByIdAndUpdate(req.params.id, updateData, { new: true });
 
@@ -79,7 +91,6 @@ const updateApplication = async (req, res) => {
                 message: 'Application not found'
              });
         }
-
         res.status(200).json({
             success: true,
             data: updatedApplication
@@ -87,7 +98,8 @@ const updateApplication = async (req, res) => {
     } catch (error) {
         res.status(400).json({ 
             success: false,
-            message: 'Unable to update application'
+            message: 'Unable to update application',
+            error: error.message || error
          });
     }
 }

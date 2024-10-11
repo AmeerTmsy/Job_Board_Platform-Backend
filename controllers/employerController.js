@@ -43,7 +43,6 @@ const addEmployer = async (req, res) => {
         }
         if (req.file) userData.profileImage = req.file.path; 
         
-        // console.log(userData)
         const employer = new Employer(userData);
         await employer.save();
         
@@ -54,7 +53,7 @@ const addEmployer = async (req, res) => {
             success: true,
             message: "Signup successful",
             data: {
-                id: user._id, name: user.name, email: user.email
+                id: employer._id, name: employer.name, email: employer.email
             }
         })
 
@@ -62,7 +61,7 @@ const addEmployer = async (req, res) => {
         res.status(400).json({
             success: false,
             message:  error.code === 11000 && error.keyPattern.email ? 
-            `${error.keyValue.email} is already in use` : "Unable to create account"
+            `${error.keyValue.email} is already in use` : `Unable to create account ${error}`
         })
     }
 }
@@ -70,21 +69,21 @@ const updateEmployer = async (req, res) => {
     try {
 
         const employer = await Employer.findById(req.params.id);
-
+        
         if (!employer) {
             return res.status(404).json({
                 success: false,
                 message: "Employer not found"
             });
         }
-
+        
         if (req.file) req.body.profileImage = req.file.path;
-
+        
         Object.assign(employer, req.body);
-        const updatedEmployer = await user.save();
-
+        const updatedEmployer = await employer.save();
+        
         return res.status(200).json({
-            success: true,
+            success: true,    
             data: updatedEmployer,
             message: "Employer's information successfully updated",
         })

@@ -10,14 +10,19 @@ const getAllJobs = async (req, res) => {
     } catch (error) {
         res.status(400).json({
             success: false,
-            message: "Unable to get all the jobs"
+            message: "Unable to fetch all the jobs"
         }) 
     }
 }
 const getJobById = async (req, res) => {
     try {
         const job = await Job.findById(req.params.id).exec();
-        return res.status(200).json({
+        if(!job) return res.status(400).json({
+             success: false, 
+             message: "Job not find"
+        }) 
+        
+        res.status(200).json({
             success: true,
             data: job
         })
@@ -33,10 +38,9 @@ const addJob = async (req, res) => {
         const job = new Job(req.body);
         await job.save();
 
-        console.log(job)
         res.status(200).json({
             success: true,
-            message: "Job created",
+            message: "Job created successfully",
             data: job
         })
     } catch (error) {
@@ -46,6 +50,7 @@ const addJob = async (req, res) => {
         })
     }
 }
+
 const updateJob = async (req, res) => {
     try {
         const job = await Job.findById(req.params.id);

@@ -15,21 +15,24 @@ const getAllUsers = async (req, res) => {
         res.status(400).json({
             success: false,
             message: "Unable to get users"
-        }) 
+        })
     }
 }
 const getUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).exec();
-        return res.status(200).json({
-            success: true,
-            data: user
+        const user = await User.findById(req.params.id).exec(); 
+
+        if (user._id) return res.status(200).json({ success: true, data: user })
+         
+        res.status(400).json({
+            success: false,
+            message: "User not found"
         })
     } catch (error) {
         res.status(400).json({
             success: false,
-            message: "Unable to the user"
-        }) 
+            message: "Unable to fetch the user"
+        })
     }
 }
 const addUser = async (req, res) => {
@@ -41,12 +44,12 @@ const addUser = async (req, res) => {
             ...req.body,
             password: hash
         }
-        if (req.file) userData.profileImage = req.file.path; 
-        
+        if (req.file) userData.profileImage = req.file.path;
+
         console.log(userData)
         const user = new User(userData);
         await user.save();
-        
+
         const token = await tokenCreat(user)
         res.cookie('token', token, cookieSafetyMeasures)
 
@@ -61,8 +64,8 @@ const addUser = async (req, res) => {
     } catch (error) {
         res.status(400).json({
             success: false,
-            message:  error.code === 11000 && error.keyPattern.email ? 
-            `${error.keyValue.email} is already in use` : "Unable to create account"
+            message: error.code === 11000 && error.keyPattern.email ?
+                `${error.keyValue.email} is already in use` : "Unable to create account"
         })
     }
 }
@@ -85,8 +88,8 @@ const updateUser = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: "User's information successfully updated",
             data: updatedUser,
+            message: "User's information successfully updated",
         })
     } catch (error) {
         res.status(400).json({

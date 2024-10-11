@@ -1,10 +1,10 @@
 const express = require('express');
-const { userVerify, userLogin, userlogout } = require('../controllers/authController');
+const { userVerify, userLogin, userlogout } = require('../controllers/userAuthController');
 const { checkLogin } = require('../midlleware/checkLogin');
 const router = express.Router();
 
 router.post('/login', userLogin);
-router.post('/verify', checkLogin, userVerify);
-router.post('/logout', userlogout);
+router.get('/verify', checkLogin, userVerify);
+router.get('/logout', checkLogin, userlogout);
 
 module.exports = router

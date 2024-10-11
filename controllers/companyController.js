@@ -30,6 +30,8 @@ const getCompanyById = async (req, res) => {
 }
 const addCompany = async (req, res) => {
     try {
+        if (req.file) req.body.logo = req.file.path; 
+
         const company = new Company(req.body);
         await company.save();
 
@@ -54,6 +56,8 @@ const updateCompany = async (req, res) => {
                 message: "Job not found"
             });
         }
+
+        if (req.file) req.body.logo = req.file.path;
         Object.assign(company, req.body);
         const updatedCompany = await company.save();
 
@@ -72,17 +76,19 @@ const deleteCompany = async (req, res) => {
     try {
         const deletedCompany = await Company.findOneAndDelete({ _id: req.params.id });
 
-        if (deleteJob) {
-            res.status(200).json({
+        if (deleteCompany) {
+            return res.status(200).json({
                 success: true,
+                message: "Deleted successfully",
                 data: deletedCompany
             });
-        } else {
-            res.status(404).json({
-                success: false,
-                message: 'Company not found'
-            });
         }
+        
+        res.status(404).json({
+            success: false,
+            message: 'Company not found'
+        });
+        
     } catch (error) {
         // Handle any errors that occur
         res.status(500).json({
