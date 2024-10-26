@@ -6,8 +6,8 @@ const Job = require('../models/jobModel');
 const getSavedJobs = async (req, res) => {
     try {
         const { id } = req.user
-
-        revomeUnavailableJobsFromSave(id)
+        console.log("hello")
+        revomeUnavailableJobsFromSave(id) 
 
         const savedJobs = await SavedJob.find({ userId: id }).populate("jobs.jobId");
 

@@ -1,6 +1,7 @@
 const Job = require("../models/jobModel")
 
 const getAllJobs = async (req, res) => {
+    
     try {
         const jobs = await Job.find({});
         res.status(200).json({

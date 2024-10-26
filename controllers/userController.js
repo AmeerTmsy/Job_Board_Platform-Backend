@@ -6,7 +6,8 @@ const saltRounds = 10;
 
 const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({});
+        // console.log('hello')
+        const users = await User.find({}).select('-password');
         res.status(200).json({
             success: true,
             data: users
@@ -20,7 +21,7 @@ const getAllUsers = async (req, res) => {
 }
 const getUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).exec(); 
+        const user = await User.findById(req.params.id).select('-password').exec(); 
 
         if (user._id) return res.status(200).json({ success: true, data: user })
          
@@ -57,7 +58,7 @@ const addUser = async (req, res) => {
             success: true,
             message: "Signup successful",
             data: {
-                id: user._id, name: user.name, email: user.email
+                id: user._id, name: user.name, email: user.email 
             }
         })
 

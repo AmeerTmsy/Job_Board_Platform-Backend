@@ -8,17 +8,17 @@ const checkLogin = async (req, res, next) => {
             if(tokenData.userType === 'employee') req.user = tokenData
             if(tokenData.userType === 'employer') req.employer = tokenData
             if(tokenData.userType === 'admin') req.admin = tokenData
-            // console.log(req.user.id)
+            // console.log('hello')
             next()
-            
         }
         catch(error) {
+            // console.log(error)
             res.status(401).send({
                 success: false,
                 message: "Unautherised Token access"
             })
         }
-    } else {
+    } else { 
         res.status(401).send({
             success: false,
             message: "Unautherised Access"

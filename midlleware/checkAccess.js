@@ -1,9 +1,9 @@
 const isUser = async (req, res, next) => {
-    if(req.eployer) next()
-        else return res.status(401).send({
-    success: false,
-    message: "Trying to access form a non user account"
-})
+    if(req.user) next()
+    else return res.status(401).send({
+        success: false,
+        message: "Trying to access form a non user account"
+    })
 }
 const isEmployer = async (req, res, next) => {
     if(!req.employer) return res.status(401).send({

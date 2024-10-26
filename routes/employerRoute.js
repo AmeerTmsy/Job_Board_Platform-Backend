@@ -9,5 +9,5 @@ router.get('/:id', getEmployerById);
 router.post('/', uploadProfileImage.single('profileImage'), addEmployer);
 router.patch('/:id', checkLogin, uploadProfileImage.single('profileImage'), updateEmployer);
 router.delete('/:id', checkLogin, deleteEmployer);
-
+ 
 module.exports = router

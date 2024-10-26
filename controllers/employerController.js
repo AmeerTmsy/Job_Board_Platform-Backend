@@ -6,7 +6,7 @@ const saltRounds = 10;
 
 const getAllEmployers = async (req, res) => {
     try {
-        const employers = await Employer.find({});
+        const employers = await Employer.find({}).select('-password');
         res.status(200).json({
             success: true,
             data: employers
@@ -20,7 +20,7 @@ const getAllEmployers = async (req, res) => {
 }
 const getEmployerById = async (req, res) => {
     try {
-        const employer = await Employer.findById(req.params.id).exec();
+        const employer = await Employer.findById(req.params.id).select('-password').exec();
         return res.status(200).json({
             success: true,
             data: employer
