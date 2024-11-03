@@ -3,8 +3,13 @@ const Application = require('../models/applicationModel');
 
 // Controller methods
 const getAllApplications = async (req, res) => {
+    const filterObj = { ...req.query }
     try {
-        const applications = await Application.find({});
+        const applications = await Application.find(filterObj)
+            .populate({
+                path: 'userId', // Field to populate
+                select: 'name profession experienced _id', // Fields to include from User
+            });
         res.status(200).json({
             success: true,
             data: applications
@@ -12,7 +17,7 @@ const getAllApplications = async (req, res) => {
     } catch (error) {
         res.status(400).json({
             success: false,
-            message: 'Unable to fetch applications' 
+            message: 'Unable to fetch applications'
         });
     }
 }
@@ -22,7 +27,7 @@ const getApplicationById = async (req, res) => {
         if (!application) {
             return res.status(400).json({
                 success: false,
-                message: 'Application not found' 
+                message: 'Application not found'
             });
         }
         res.status(200).json({
@@ -32,7 +37,7 @@ const getApplicationById = async (req, res) => {
     } catch (error) {
         res.status(400).json({
             success: false,
-            message: 'Unable to fetch application' 
+            message: 'Unable to fetch application'
         });
     }
 }
@@ -40,8 +45,10 @@ const addApplication = async (req, res) => {
     try {
         const userId = req.user.id
         const { jobId } = req.body;
+        console.log('req.body:', req.body)
+        console.log('req.file:', req.file)
         let resumeUrl;
-        if(req.file){
+        if (req.file) {
             resumeUrl = req.file.path;
         } else {
             return res.status(400).json({
@@ -49,7 +56,7 @@ const addApplication = async (req, res) => {
                 message: 'Resume not found',
             });
         }
-         // This is the Cloudinary URL
+        // This is the Cloudinary URL
 
         // Create a new application object
         const newApplication = new Application({
@@ -79,28 +86,28 @@ const updateApplication = async (req, res) => {
         let updateData = {};
 
         if (req.file) {
-            console.log('Uploaded File:', req.file); 
-            updateData.resume = req.file.path; 
+            console.log('Uploaded File:', req.file);
+            updateData.resume = req.file.path;
         }
 
         const updatedApplication = await Application.findByIdAndUpdate(req.params.id, updateData, { new: true });
 
         if (!updatedApplication) {
-            return res.status(404).json({ 
+            return res.status(404).json({
                 success: false,
                 message: 'Application not found'
-             });
+            });
         }
         res.status(200).json({
             success: true,
             data: updatedApplication
         });
     } catch (error) {
-        res.status(400).json({ 
+        res.status(400).json({
             success: false,
             message: 'Unable to update application',
             error: error.message || error
-         });
+        });
     }
 }
 const deleteApplication = async (req, res) => {
@@ -109,12 +116,12 @@ const deleteApplication = async (req, res) => {
         if (!deletedApplication) {
             return res.status(400).json({
                 success: false,
-                message: 'Application not found' 
+                message: 'Application not found'
             });
         }
-        res.status(200).json({ 
+        res.status(200).json({
             success: true,
-            message: 'Application deleted successfully' 
+            message: 'Application deleted successfully'
         });
     } catch (error) {
         res.status(400).json({

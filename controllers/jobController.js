@@ -1,9 +1,28 @@
 const Job = require("../models/jobModel")
 
 const getAllJobs = async (req, res) => {
-    
+    console.log(req.query);
+
+    const filterObj = { ...req.query }
+    delete filterObj.sort
+    delete filterObj.limit
+    delete filterObj.select
     try {
-        const jobs = await Job.find({});
+        const jobs = await Job.find(filterObj).populate({
+            path: 'company',
+            select: '_id name'  // Select only the _id and name fields
+        })
+
+        // console.log(jobs)
+        if (req.query.sort) jobs = jobs.sort(req.query.sort)
+
+        if (jobs.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Jobs not found"
+            })
+        }
+
         res.status(200).json({
             success: true,
             data: jobs
@@ -12,17 +31,20 @@ const getAllJobs = async (req, res) => {
         res.status(400).json({
             success: false,
             message: "Unable to fetch all the jobs"
-        }) 
+        })
     }
 }
 const getJobById = async (req, res) => {
     try {
-        const job = await Job.findById(req.params.id).exec();
-        if(!job) return res.status(400).json({
-             success: false, 
-             message: "Job not find"
-        }) 
-        
+        const job = await Job.findById(req.params.id).populate({
+            path: 'company',
+            select: '_id name'  // Select only the _id and name fields
+        }).exec();
+        if (!job) return res.status(400).json({
+            success: false,
+            message: "Job not find"
+        })
+
         res.status(200).json({
             success: true,
             data: job
@@ -31,7 +53,7 @@ const getJobById = async (req, res) => {
         res.status(400).json({
             success: false,
             message: "Unable to get the job"
-        }) 
+        })
     }
 }
 const addJob = async (req, res) => {
@@ -53,18 +75,23 @@ const addJob = async (req, res) => {
 }
 
 const updateJob = async (req, res) => {
+    console.log(req.body);
+
     try {
         const job = await Job.findById(req.params.id);
-
+        // console.log('job:', job);
+        
         if (!job) {
             return res.status(404).json({
                 success: false,
                 message: "Job not found"
             });
         }
-        Object.assign(job, req.body);
+        Object.assign(job, req.body)
+        // console.log('job:', job);
         const updatedJob = await job.save();
-
+        // console.log("updateJob: ", updatedJob);
+        
         return res.status(200).json({
             success: true,
             message: "Job's information successfully updated",
@@ -73,7 +100,8 @@ const updateJob = async (req, res) => {
     } catch (error) {
         res.status(400).json({
             success: false,
-            message: "Unable to update the job's information"
+            message: "Unable to update the job's information",
+            error: error.message
         })
     }
 }

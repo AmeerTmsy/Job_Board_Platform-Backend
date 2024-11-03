@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/', getAllJobs);
 router.get('/:id', getJobById);
 router.post('/', checkLogin, isEmployer, addJob);
-router.patch('/:id', checkLogin, isEmployer, updateJob);
+router.patch('/:id', updateJob);
 router.delete('/:id', checkLogin, isEmployer, deleteJob);
 
 module.exports = router

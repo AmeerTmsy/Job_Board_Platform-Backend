@@ -19,8 +19,9 @@ const saveJobRoute = require('./routes/saveJobRoute');
 app.use(cors({origin:true, credentials: true}))
 app.use(cookieParser())
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
-app.use('/users', userRoute);
+app.use('/users', userRoute); 
 app.use('/employers', employerRoute);
 app.use('/jobs', jobRout);
 app.use('/applications', applicationRoute);

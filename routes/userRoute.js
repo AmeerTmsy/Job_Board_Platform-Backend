@@ -4,10 +4,10 @@ const { uploadProfileImage } = require('../midlleware/handlUpload');
 const { checkLogin } = require('../midlleware/checkLogin');
 const router = express.Router();
 
-router.get('/', checkLogin, getAllUsers);
-router.get('/:id', checkLogin, getUserById);
+router.get('/', getAllUsers);
+router.get('/:id',  getUserById);
 router.post('/', uploadProfileImage.single('profileImage'), addUser);
 router.patch('/:id', uploadProfileImage.single('profileImage'), updateUser);
-router.delete('/:id', checkLogin, deleteUser);
+router.delete('/:id', deleteUser);
 
 module.exports = router

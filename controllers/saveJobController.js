@@ -6,19 +6,29 @@ const Job = require('../models/jobModel');
 const getSavedJobs = async (req, res) => {
     try {
         const { id } = req.user
-        console.log("hello")
-        revomeUnavailableJobsFromSave(id) 
+        // console.log("hello,", req.user);
+        revomeUnavailableJobsFromSave(id)
 
-        const savedJobs = await SavedJob.find({ userId: id }).populate("jobs.jobId");
+        const savedJobs = await SavedJob.find({ userId: id })
+            .populate({
+                path: 'jobs.jobId',
+                populate: {
+                    path: 'company', // Populating the company field inside the job
+                    model: 'Company', // The model name for the company
+                    select: '_id name' // Select only the _id and name fields from the company
+                }
+            });
 
         if (!savedJobs) return res.status(400).json({
             success: false,
             message: 'Nothing found as saved jobs'
         });
+        console.log("savedJobs:", savedJobs);
+
 
         res.status(200).json({
             success: true,
-            data: savedJobs
+            data: savedJobs[0].jobs
         });
     } catch (error) {
         res.status(400).json({
@@ -52,11 +62,14 @@ const getSavedJobs = async (req, res) => {
 const saveJob = async (req, res) => {
     // console.log(req.body)
     const { jobId, jobTitle } = req.body
+    // console.log(req.user)
     const userId = req.user.id
+
+    console.log(req.body)
 
     try {
         const jobActive = await Job.findOne({ _id: jobId });
-
+        // console.log('jobActive: ', jobActive)
         if (!jobActive) {
             return res.status(400).json({
                 success: false,
@@ -75,9 +88,21 @@ const saveJob = async (req, res) => {
         savedJob.TotalJobSaved();
         await savedJob.save()
 
+        const populatedSavedJob = await SavedJob.findOne({ userId })
+            .populate({
+                path: 'jobs.jobId',
+                populate: {
+                    path: 'company',
+                    model: 'Company',
+                    select: '_id name'
+                }
+            });
+
+        //     console.log("hello, ", savedJobs)
+
         res.status(201).json({
             success: true,
-            data: savedJob,
+            data: populatedSavedJob.jobs,
         });
     } catch (error) {
         res.status(400).json({
@@ -92,7 +117,8 @@ const removeSavedJob = async (req, res) => {
     const userId = req.user.id
 
     try {
-        const savedJobExist = await SavedJob.findOne({ userId });
+        const savedJobExist = await SavedJob.findOne({ userId })
+
         if (!savedJobExist) {
             return res.status(400).json({
                 success: false,
@@ -105,10 +131,21 @@ const removeSavedJob = async (req, res) => {
         savedJobExist.TotalJobSaved()
         await savedJobExist.save()
 
-        console.log(savedJobExist);
-        res.status(200).json({
+        // console.log('savedJobExist:', savedJobExist);
+
+        const populatedSavedJobExist = await SavedJob.findOne({ userId })
+            .populate({
+                path: 'jobs.jobId',
+                populate: {
+                    path: 'company',
+                    model: 'Company',
+                    select: '_id name'
+                }
+            });
+
+        res.status(201).json({
             success: true,
-            message: 'Job unsaved successfully'
+            data: populatedSavedJobExist.jobs,
         });
     } catch (error) {
         res.status(400).json({

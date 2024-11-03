@@ -53,7 +53,7 @@ const addEmployer = async (req, res) => {
             success: true,
             message: "Signup successful",
             data: {
-                id: employer._id, name: employer.name, email: employer.email
+                id: employer._id, name: employer.name, email: employer.email, userType: employer.userType,  profileImage: employer.profileImage
             }
         })
 

@@ -26,7 +26,7 @@ const companySchema = new mongoose.Schema({
     },
     verifiedCompany: {
         type: String,
-        enum: ['pending', 'fulfilled', 'rejected'],  // Add the enum for status options
+        enum: ['pending', 'approved', 'rejected'],  // Add the enum for status options
         default: 'pending',  // Set the default value
     },
     logo: {

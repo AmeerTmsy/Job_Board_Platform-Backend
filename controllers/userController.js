@@ -5,9 +5,15 @@ const saltRounds = 10;
 
 
 const getAllUsers = async (req, res) => {
+    const filterObj = { ...req.query }
+    delete filterObj.sort
+    delete filterObj.limit
+    delete filterObj.select
     try {
         // console.log('hello')
-        const users = await User.find({}).select('-password');
+        const users = await User.find(filterObj).select('-password');
+        if (req.query.sort) users = users.sort(req.query.sort)
+        // if()
         res.status(200).json({
             success: true,
             data: users
@@ -21,10 +27,12 @@ const getAllUsers = async (req, res) => {
 }
 const getUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).select('-password').exec(); 
+        // console.log("req.params");
+
+        const user = await User.findById(req.params.id).select('-password').exec();
 
         if (user._id) return res.status(200).json({ success: true, data: user })
-         
+
         res.status(400).json({
             success: false,
             message: "User not found"
@@ -37,6 +45,7 @@ const getUserById = async (req, res) => {
     }
 }
 const addUser = async (req, res) => {
+    // console.log(req);
 
     try {
         const hash = bcrypt.hashSync(req.body.password, saltRounds)
@@ -58,7 +67,7 @@ const addUser = async (req, res) => {
             success: true,
             message: "Signup successful",
             data: {
-                id: user._id, name: user.name, email: user.email 
+                id: user._id, name: user.name, email: user.email, userType: user.userType, profileImage: user.profileImage
             }
         })
 
@@ -71,6 +80,8 @@ const addUser = async (req, res) => {
     }
 }
 const updateUser = async (req, res) => {
+    console.log(req.body);
+
     try {
 
         const user = await User.findById(req.params.id);

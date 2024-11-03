@@ -33,7 +33,8 @@ const userLogin = async (req, res) => {
                 id: user._id, 
                 name: user.name, 
                 email: user.email, 
-                userType: user.userType
+                userType: user.userType,
+                profileImage: user.profileImage
             }
         })
 
@@ -54,11 +55,12 @@ const userVerify = async (req, res) => {
     res.status(200).json({
         success: true,
         message: "autherised access",
-        data
+        data : data
     })
 }
 
 const userlogout = async (req, res) => {
+    console.log("userlogout")
     res.clearCookie('token', { path: '/' });
     res.clearCookie('refreshToken', { path: '/' });
     res.status(200).send({ 

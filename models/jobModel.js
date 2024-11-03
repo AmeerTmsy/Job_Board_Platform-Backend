@@ -44,7 +44,7 @@ const jobSchema = new mongoose.Schema({
     },
     verifiedJob:{
         type: String,
-        enum: ['pending', 'fulfilled', 'rejected'],
+        enum: ['pending', 'approved', 'rejected'],
         default: 'pending',
     }
 }, { timestamps: true })

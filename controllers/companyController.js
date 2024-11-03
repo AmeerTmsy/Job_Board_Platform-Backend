@@ -1,17 +1,30 @@
 const Company = require("../models/companyModel")
 
 const getAllCompanies = async (req, res) => {
+    const filterObj = { ...req.query }
+    delete filterObj.sort
+    delete filterObj.limit
+    delete filterObj.select
     try {
-        const companys = await Company.find({});
+        const companies = await Company.find(filterObj);
+        if (req.query.sort) companies = companies.sort(req.query.sort)
+            
+        if (companies.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Jobs not found"
+            })
+        }
+
         res.status(200).json({
             success: true,
-            data: companys
+            data: companies
         })
     } catch (error) {
         res.status(400).json({
             success: false,
             message: "Unable to get all the companies"
-        }) 
+        })
     }
 }
 const getCompanyById = async (req, res) => {
@@ -25,12 +38,12 @@ const getCompanyById = async (req, res) => {
         res.status(400).json({
             success: false,
             message: "Unable to get the company"
-        }) 
+        })
     }
 }
 const addCompany = async (req, res) => {
     try {
-        if (req.file) req.body.logo = req.file.path; 
+        if (req.file) req.body.logo = req.file.path;
 
         const company = new Company(req.body);
         await company.save();
@@ -47,6 +60,7 @@ const addCompany = async (req, res) => {
     }
 }
 const updateCompany = async (req, res) => {
+    console.log(req.body)
     try {
         const company = await Company.findById(req.params.id);
 
@@ -83,12 +97,12 @@ const deleteCompany = async (req, res) => {
                 data: deletedCompany
             });
         }
-        
+
         res.status(404).json({
             success: false,
             message: 'Company not found'
         });
-        
+
     } catch (error) {
         // Handle any errors that occur
         res.status(500).json({

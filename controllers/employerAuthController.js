@@ -33,7 +33,8 @@ const employerLogin = async (req, res) => {
                 id: employer._id,
                 name: employer.name,
                 email: employer.email,
-                userType: employer.userType
+                userType: employer.userType, 
+                profileImage: employer.profileImage
             }
         })
 
@@ -46,17 +47,11 @@ const employerLogin = async (req, res) => {
 }
 
 const employerVerify = async (req, res) => {
-    let data;
-    if (req.user) data = req.user
-    if (req.employer) data = req.employer
-    if (req.admin) data = req.admin
-
-    // console.log(req.employer)
 
     res.status(200).json({
         success: true,
         message: "autherised access",
-        data
+        data : req.employer ? req.employer : req.admin
     })
 }
 

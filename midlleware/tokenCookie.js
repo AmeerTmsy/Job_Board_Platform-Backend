@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const tokenCreat = async (objDetail) =>{
     const token = await jwt.sign(
-        { id: objDetail._id, name: objDetail.name, email: objDetail.email, userType: objDetail.userType },
+        { id: objDetail._id, name: objDetail.name, email: objDetail.email, userType: objDetail.userType, profileImage: objDetail.profileImage },
         process.env.JWT_TOKEN,
         { expiresIn: '1h' }
     );
