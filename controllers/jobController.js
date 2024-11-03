@@ -1,7 +1,7 @@
 const Job = require("../models/jobModel")
 
 const getAllJobs = async (req, res) => {
-    console.log(req.query);
+    // console.log(req.query);
 
     const filterObj = { ...req.query }
     delete filterObj.sort

@@ -51,7 +51,7 @@ const userVerify = async (req, res) => {
     if(req.user) data = req.user
     if(req.employer) data = req.employer
     if(req.admin) data = req.admin
-    
+    console.log(data)
     res.status(200).json({
         success: true,
         message: "autherised access",
