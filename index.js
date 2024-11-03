@@ -16,7 +16,16 @@ const employerAuthRoute = require('./routes/employerAuthRoute');
 const companyRoute = require('./routes/companyRoute');
 const saveJobRoute = require('./routes/saveJobRoute');
 
-app.use(cors({origin:true, credentials: true}))
+let allowedOrigins = [];
+if (process.env.ENVIRONMENT === 'development') {
+  allowedOrigins = [`http://localhost:5173`];
+} else if (process.env.ENVIRONMENT === 'production') {
+  allowedOrigins = [`https://job-board-platform-frontend-nine.vercel.app`];
+}
+
+app.use(cors({credentials: true,
+  origin: allowedOrigins
+})) 
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
