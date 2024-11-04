@@ -60,13 +60,21 @@ const userVerify = async (req, res) => {
 }
 
 const userlogout = async (req, res) => {
-    console.log("userlogout")
+    console.log("Cookies before logout:", req.cookie);
     res.clearCookie('token', { path: '/' });
     res.clearCookie('refreshToken', { path: '/' });
-    res.status(200).send({ 
-        success: true,
-        message: 'Logout successful'
-     });
+    console.log("Cookies after logout:", req.cookie);
+    try {
+        res.clearCookie("token",{
+            sameSite:"None",
+            secure:true,
+            httpOnly:true
+        });
+        res.json({ success: true, message: "user logged out" });
+    } catch (error) {
+        console.log(error);
+        res.status(error.statusCode || 500).json(error.message || "Internal server error");
+    }
 }
 
 module.exports = {

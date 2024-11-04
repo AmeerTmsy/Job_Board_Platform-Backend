@@ -23,7 +23,7 @@ const getSavedJobs = async (req, res) => {
             success: false,
             message: 'Nothing found as saved jobs'
         });
-        console.log("savedJobs:", savedJobs);
+        // console.log("savedJobs:", savedJobs);
 
 
         res.status(200).json({
