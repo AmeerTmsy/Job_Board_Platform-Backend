@@ -63,8 +63,8 @@ const userlogout = async (req, res) => {
     console.log("Cookies before logout:", req.cookie);
     try {
         res.clearCookie("token",{
-            sameSite:"None",
-            secure:true,
+            sameSite: process.env.ENVIRONMENT === "development" ? 'Lax': 'None',
+            secure: process.env.ENVIRONMENT === "development" ? false : true,
             httpOnly:true
         });
         res.json({ success: true, message: "user logged out" });
