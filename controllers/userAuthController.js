@@ -61,9 +61,6 @@ const userVerify = async (req, res) => {
 
 const userlogout = async (req, res) => {
     console.log("Cookies before logout:", req.cookie);
-    res.clearCookie('token', { path: '/' });
-    res.clearCookie('refreshToken', { path: '/' });
-    console.log("Cookies after logout:", req.cookie);
     try {
         res.clearCookie("token",{
             sameSite:"None",
