@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const { tokenCreat, cookieSafetyMeasures } = require("../midlleware/tokenCookie");
 
 const employerLogin = async (req, res) => {
-    console.log("employer")
+    // console.log("employer")
     try {
         const { email, password } = req.body
 
