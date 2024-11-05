@@ -25,13 +25,13 @@ if (process.env.ENVIRONMENT === 'development') {
 
 app.use(cors({credentials: true,
   origin: allowedOrigins
-})) 
+}))
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use('/users', userRoute); 
-app.use('/employers', employerRoute);
+app.use('/employers', employerRoute); 
 app.use('/jobs', jobRout);
 app.use('/applications', applicationRoute);
 app.use('/user/auth', userAuthRoute);

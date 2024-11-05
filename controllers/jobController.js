@@ -1,17 +1,23 @@
 const Job = require("../models/jobModel")
 
 const getAllJobs = async (req, res) => {
-    // console.log(req.query);
+    console.log("req.query: ", req.query);
 
     const filterObj = { ...req.query }
     delete filterObj.sort
     delete filterObj.limit
     delete filterObj.select
+    if (filterObj.searchKey) {
+        filterObj.title = { '$regex':  filterObj.searchKey , '$options': 'i' }
+    }
+    delete filterObj.searchKey;
     try {
+        console.log("filterObf:", filterObj)
         const jobs = await Job.find(filterObj).populate({
             path: 'company',
             select: '_id name'  // Select only the _id and name fields
         })
+        console.log("jobs:", jobs)
 
         // console.log(jobs)
         if (req.query.sort) jobs = jobs.sort(req.query.sort)
@@ -34,6 +40,7 @@ const getAllJobs = async (req, res) => {
         })
     }
 }
+
 const getJobById = async (req, res) => {
     try {
         const job = await Job.findById(req.params.id).populate({

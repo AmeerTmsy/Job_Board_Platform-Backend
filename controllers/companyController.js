@@ -5,10 +5,14 @@ const getAllCompanies = async (req, res) => {
     delete filterObj.sort
     delete filterObj.limit
     delete filterObj.select
+        if (filterObj.searchKey) {
+            filterObj.name = { '$regex': filterObj.searchKey, '$options': 'i' }
+        }
+    delete filterObj.searchKey;
     try {
         const companies = await Company.find(filterObj);
         if (req.query.sort) companies = companies.sort(req.query.sort)
-            
+
         if (companies.length === 0) {
             return res.status(400).json({
                 success: false,

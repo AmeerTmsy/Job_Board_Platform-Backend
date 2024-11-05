@@ -9,6 +9,10 @@ const getAllUsers = async (req, res) => {
     delete filterObj.sort
     delete filterObj.limit
     delete filterObj.select
+    if (filterObj.searchKey) {
+        filterObj.name = { '$regex': filterObj.searchKey, '$options': 'i' }
+    }
+    delete filterObj.searchKey;
     try {
         // console.log('hello')
         const users = await User.find(filterObj).select('-password');
@@ -46,7 +50,6 @@ const getUserById = async (req, res) => {
 }
 const addUser = async (req, res) => {
     // console.log(req);
-
     try {
         const hash = bcrypt.hashSync(req.body.password, saltRounds)
 

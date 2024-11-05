@@ -4,12 +4,12 @@ const jobSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        maxLength: 25,
+        maxLength: 35,
     },
     headline: {
         type: String,
         required: true,
-        maxLength: 50,
+        maxLength: 80,
     },
     description: {
         type: String,
