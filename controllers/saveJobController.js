@@ -6,25 +6,25 @@ const Job = require('../models/jobModel');
 const getSavedJobs = async (req, res) => {
     try {
         const { id } = req.user
-        // console.log("hello,", req.user);
         revomeUnavailableJobsFromSave(id)
-
+        
         const savedJobs = await SavedJob.find({ userId: id })
-            .populate({
-                path: 'jobs.jobId',
-                populate: {
-                    path: 'company', // Populating the company field inside the job
-                    model: 'Company', // The model name for the company
-                    select: '_id name' // Select only the _id and name fields from the company
-                }
-            });
-
-        if (!savedJobs) return res.status(400).json({
+        .populate({
+            path: 'jobs.jobId',
+            populate: {
+                path: 'company', // Populating the company field inside the job
+                model: 'Company', // The model name for the company
+                select: '_id name' // Select only the _id and name fields from the company
+            }
+        });
+        // console.log("hello,", !savedJobs);
+        
+        if (!savedJobs  ||  savedJobs.length === 0 ) return res.status(400).json({
             success: false,
             message: 'Nothing found as saved jobs'
         });
         // console.log("savedJobs:", savedJobs);
-
+        
 
         res.status(200).json({
             success: true,
@@ -65,7 +65,7 @@ const saveJob = async (req, res) => {
     // console.log(req.user)
     const userId = req.user.id
 
-    console.log(req.body)
+    // console.log(req.body)
 
     try {
         const jobActive = await Job.findOne({ _id: jobId });
@@ -78,14 +78,16 @@ const saveJob = async (req, res) => {
         }
 
         let savedJob = await SavedJob.findOne({ userId })
+        console.log("user id: ",userId)
         if (!savedJob) savedJob = new SavedJob({ userId, jobs: [] });
 
         const alreadySaved = savedJob.jobs.some(item => item.jobId.equals(jobId))
         if (alreadySaved) return res.status(400).json({ success: false, message: "Job already saved" })
 
         // console.log('jobId - ',jobId,' jobTitle - ', jobTitle);
-        savedJob.jobs.push({ jobId, jobTitle })
+        savedJob.jobs.push({ jobId: jobId, jobTitle: jobTitle })
         savedJob.TotalJobSaved();
+        // console.log(req.body, savedJob)
         await savedJob.save()
 
         const populatedSavedJob = await SavedJob.findOne({ userId })
@@ -105,6 +107,9 @@ const saveJob = async (req, res) => {
             data: populatedSavedJob.jobs,
         });
     } catch (error) {
+        console.log("================================================")
+        // console.log("error: ", error)
+        // console.log("================================================")
         res.status(400).json({
             success: false,
             message: 'Failed to save job'

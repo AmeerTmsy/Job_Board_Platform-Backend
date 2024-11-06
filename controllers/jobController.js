@@ -12,12 +12,12 @@ const getAllJobs = async (req, res) => {
     }
     delete filterObj.searchKey;
     try {
-        console.log("filterObf:", filterObj)
+        // console.log("filterObf:", filterObj)
         const jobs = await Job.find(filterObj).populate({
             path: 'company',
             select: '_id name'  // Select only the _id and name fields
         })
-        console.log("jobs:", jobs)
+        // console.log("jobs:", jobs)
 
         // console.log(jobs)
         if (req.query.sort) jobs = jobs.sort(req.query.sort)
