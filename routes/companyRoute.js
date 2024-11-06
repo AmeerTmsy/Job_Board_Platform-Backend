@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', getAllCompanies);
 router.get('/:id', getCompanyById);
 router.post('/', checkLogin, isEmployer, uploadIconImage.single('companyIconImage'), addCompany);
-router.patch('/:id',  uploadIconImage.single('companyIconImage'), updateCompany);
+router.patch('/:id', checkLogin,  uploadIconImage.single('companyIconImage'), updateCompany);
 router.delete('/:id', checkLogin, isEmployer, deleteCompany);
 
 module.exports = router

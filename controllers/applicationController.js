@@ -1,4 +1,5 @@
 
+const { application } = require('express');
 const Application = require('../models/applicationModel');
 
 // Controller methods
@@ -10,6 +11,7 @@ const getAllApplications = async (req, res) => {
                 path: 'userId', // Field to populate
                 select: 'name profession experienced _id', // Fields to include from User
             });
+        // console.log(applications)
         res.status(200).json({
             success: true,
             data: applications

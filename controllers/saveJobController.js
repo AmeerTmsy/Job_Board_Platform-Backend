@@ -107,7 +107,7 @@ const saveJob = async (req, res) => {
             data: populatedSavedJob.jobs,
         });
     } catch (error) {
-        console.log("================================================")
+        // console.log("================================================")
         // console.log("error: ", error)
         // console.log("================================================")
         res.status(400).json({
