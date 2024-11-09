@@ -2,11 +2,12 @@ const Company = require("../models/companyModel")
 
 const getAllCompanies = async (req, res) => {
     const filterObj = { ...req.query }
-    delete filterObj.sort
-    delete filterObj.limit
-    delete filterObj.select
         if (filterObj.searchKey) {
-            filterObj.name = { '$regex': filterObj.searchKey, '$options': 'i' }
+            filterObj.$or = [
+                { name: { '$regex': filterObj.searchKey, '$options': 'i' } },
+                { industry: { '$regex': filterObj.searchKey, '$options': 'i' } },
+                { location: { '$regex': filterObj.searchKey, '$options': 'i' } }
+            ];
         }
     delete filterObj.searchKey;
     try {

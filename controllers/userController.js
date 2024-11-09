@@ -6,18 +6,18 @@ const saltRounds = 10;
 
 const getAllUsers = async (req, res) => {
     const filterObj = { ...req.query }
-    delete filterObj.sort
-    delete filterObj.limit
-    delete filterObj.select
     if (filterObj.searchKey) {
-        filterObj.name = { '$regex': filterObj.searchKey, '$options': 'i' }
+        filterObj.$or = [
+            { name: { '$regex': filterObj.searchKey, '$options': 'i' } },
+            { profession: { '$regex': filterObj.searchKey, '$options': 'i' } }
+        ];
     }
     delete filterObj.searchKey;
     try {
-        // console.log('hello')
         const users = await User.find(filterObj).select('-password');
         if (req.query.sort) users = users.sort(req.query.sort)
-        // if()
+
+        console.log('hello: ', users)
         res.status(200).json({
             success: true,
             data: users
