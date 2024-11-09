@@ -18,7 +18,7 @@
         },
         description: {
             type: String,
-        },
+        }, 
         createdBy: {
             type: mongoose.Types.ObjectId,
             ref: 'Employer',

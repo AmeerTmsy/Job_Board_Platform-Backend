@@ -60,7 +60,7 @@ const userVerify = async (req, res) => {
 }
 
 const userlogout = async (req, res) => {
-    console.log("Cookies before logout:", req.cookie);
+    // console.log("Cookies before logout:", req.cookie);
     try {
         res.clearCookie("token",{
             sameSite: process.env.ENVIRONMENT === "development" ? 'Lax': 'None',

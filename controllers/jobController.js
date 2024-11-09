@@ -17,7 +17,7 @@ const getAllJobs = async (req, res) => {
             path: 'company',
             select: '_id name'  // Select only the _id and name fields
         })
-        // console.log("jobs:", jobs)
+        console.log("jobs:", jobs)
 
         // console.log(jobs)
         if (req.query.sort) jobs = jobs.sort(req.query.sort)
@@ -28,6 +28,7 @@ const getAllJobs = async (req, res) => {
                 message: "Jobs not found"
             })
         }
+        // console.log('jobs: ', jobs)
 
         res.status(200).json({
             success: true,
