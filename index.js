@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors')
 const app = express();
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const port = 3000;
 const connectDB = require('./config/db');
 connectDB();
@@ -31,7 +30,6 @@ app.use(cors({
 }))
 app.use(cookieParser())
 app.use(express.json())
-// app.use(multer().any())
 app.use(express.urlencoded({ extended: true }))
 
 app.use('/users', userRoute);
